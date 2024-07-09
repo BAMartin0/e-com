@@ -127,6 +127,10 @@ router.delete('/:id', (req, res) => {
       id: req.params.id,
     }
   })
+  .then((deletedProduct) => {
+      res.json(deletedProduct);
+    })
+    .catch((err) => res.json(err));
 });
 
 module.exports = router;
