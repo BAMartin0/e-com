@@ -12,13 +12,9 @@ router.get('/', async (req, res) => {
       include: [
         {
           model: Product, as: 'products',
-          include: [
-            {
-              model: Tag, as: 'tags', through: {
+          through: {
                 attributes: []
               }
-            }
-          ]
         }
       ]
     });
@@ -51,29 +47,15 @@ router.get('/:id', async (req, res) => {
   }
   
 });
-//-----------------------------
+
 router.post('/', (req, res) => {
   // create a new tag
   Tag.create(req.body)
     .then((tag) => {
-      // if there's product tags, we need to create pairings to bulk create in the ProductTag model
-      if (req.body.productIds.length) {
-        const productTagIdArr = req.body.productIds.map((product_id) => {
-          return {
-            product_id: product.id,
-            tag_id,
-          };
-        });
-        return ProductTag.bulkCreate(productTagIdArr);
-      }
-      //--------------------------------
-      // if no product tags, just respond
-      res.status(200).json(product);
+      res.json(tag);
     })
-    .then((productTagIds) => res.status(200).json(productTagIds))
     .catch((err) => {
-      console.log(err);
-      res.status(400).json(err);
+      res.json(err);
     });
 });
 
